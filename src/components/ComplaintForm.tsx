@@ -1,5 +1,6 @@
 import { useState } from "react";
 import { Send, Shield, CheckCircle } from "lucide-react";
+import { z } from "zod";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Textarea } from "@/components/ui/textarea";
@@ -12,6 +13,16 @@ import {
   SelectValue,
 } from "@/components/ui/select";
 import { useToast } from "@/hooks/use-toast";
+import { supabase } from "@/integrations/supabase/client";
+
+const complaintSchema = z.object({
+  name: z.string().min(1, "Nama harus diisi").max(100, "Nama terlalu panjang"),
+  email: z.string().email("Email tidak valid").max(255, "Email terlalu panjang"),
+  department: z.string().max(100, "Departemen terlalu panjang").optional(),
+  category: z.string().min(1, "Kategori harus dipilih"),
+  subject: z.string().min(1, "Subjek harus diisi").max(200, "Subjek terlalu panjang"),
+  message: z.string().min(1, "Isi aduan harus diisi").max(2000, "Isi aduan terlalu panjang"),
+});
 
 const ComplaintForm = () => {
   const { toast } = useToast();
@@ -24,40 +35,67 @@ const ComplaintForm = () => {
     subject: "",
     message: "",
   });
+  const [errors, setErrors] = useState<Record<string, string>>({});
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
     setIsSubmitting(true);
+    setErrors({});
 
-    // Validate form
-    if (!formData.name || !formData.email || !formData.category || !formData.subject || !formData.message) {
-      toast({
-        title: "Formulir tidak lengkap",
-        description: "Mohon lengkapi semua field yang wajib diisi.",
-        variant: "destructive",
+    try {
+      const validated = complaintSchema.parse(formData);
+
+      const { error } = await supabase.from("complaints").insert({
+        name: validated.name,
+        email: validated.email,
+        department: validated.department || null,
+        category: validated.category,
+        subject: validated.subject,
+        message: validated.message,
+        status: "Baru",
       });
+
+      if (error) {
+        throw error;
+      }
+
+      toast({
+        title: "Aduan Terkirim",
+        description: "Terima kasih. Aduan Anda akan segera kami proses.",
+      });
+
+      setFormData({
+        name: "",
+        email: "",
+        department: "",
+        category: "",
+        subject: "",
+        message: "",
+      });
+    } catch (error) {
+      if (error instanceof z.ZodError) {
+        const fieldErrors: Record<string, string> = {};
+        error.errors.forEach((err) => {
+          if (err.path[0]) {
+            fieldErrors[err.path[0].toString()] = err.message;
+          }
+        });
+        setErrors(fieldErrors);
+        toast({
+          title: "Formulir tidak lengkap",
+          description: "Mohon perbaiki kesalahan pada formulir.",
+          variant: "destructive",
+        });
+      } else {
+        toast({
+          title: "Gagal mengirim",
+          description: "Terjadi kesalahan. Silakan coba lagi.",
+          variant: "destructive",
+        });
+      }
+    } finally {
       setIsSubmitting(false);
-      return;
     }
-
-    // Create mailto link
-    const mailtoSubject = encodeURIComponent(`[${formData.category}] ${formData.subject}`);
-    const mailtoBody = encodeURIComponent(
-      `Nama: ${formData.name}\nEmail: ${formData.email}\nDepartemen: ${formData.department || "-"}\nKategori: ${formData.category}\n\nIsi Aduan:\n${formData.message}`
-    );
-    const mailtoLink = `mailto:sp.berdikari@gmail.com?subject=${mailtoSubject}&body=${mailtoBody}`;
-
-    // Open email client
-    window.location.href = mailtoLink;
-
-    // Show success toast
-    setTimeout(() => {
-      toast({
-        title: "Membuka aplikasi email",
-        description: "Silakan kirim email melalui aplikasi email Anda.",
-      });
-      setIsSubmitting(false);
-    }, 1000);
   };
 
   return (
@@ -100,6 +138,9 @@ const ComplaintForm = () => {
                       }
                       className="bg-background"
                     />
+                    {errors.name && (
+                      <p className="text-sm text-destructive">{errors.name}</p>
+                    )}
                   </div>
                   <div className="space-y-2">
                     <label className="text-sm font-medium text-foreground">
@@ -114,6 +155,9 @@ const ComplaintForm = () => {
                       }
                       className="bg-background"
                     />
+                    {errors.email && (
+                      <p className="text-sm text-destructive">{errors.email}</p>
+                    )}
                   </div>
                 </div>
 
@@ -160,6 +204,9 @@ const ComplaintForm = () => {
                         <SelectItem value="Lainnya">Lainnya</SelectItem>
                       </SelectContent>
                     </Select>
+                    {errors.category && (
+                      <p className="text-sm text-destructive">{errors.category}</p>
+                    )}
                   </div>
                 </div>
 
@@ -175,6 +222,9 @@ const ComplaintForm = () => {
                     }
                     className="bg-background"
                   />
+                  {errors.subject && (
+                    <p className="text-sm text-destructive">{errors.subject}</p>
+                  )}
                 </div>
 
                 <div className="space-y-2">
@@ -190,6 +240,9 @@ const ComplaintForm = () => {
                     }
                     className="bg-background resize-none"
                   />
+                  {errors.message && (
+                    <p className="text-sm text-destructive">{errors.message}</p>
+                  )}
                 </div>
 
                 <div className="bg-muted/50 p-4 rounded-lg text-sm text-muted-foreground">
@@ -207,11 +260,11 @@ const ComplaintForm = () => {
                   disabled={isSubmitting}
                 >
                   {isSubmitting ? (
-                    "Memproses..."
+                    "Mengirim..."
                   ) : (
                     <>
                       <Send className="w-4 h-4 mr-2" />
-                      Kirim Aduan via Email
+                      Kirim Aduan
                     </>
                   )}
                 </Button>

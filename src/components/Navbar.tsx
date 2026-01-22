@@ -1,10 +1,12 @@
 import { useState } from "react";
-import { Menu, X, Users } from "lucide-react";
+import { Menu, X, Users, Lock } from "lucide-react";
 import { Button } from "@/components/ui/button";
+import { Link } from "react-router-dom";
 
 const navLinks = [
   { href: "#pengumuman", label: "Pengumuman" },
   { href: "#agenda", label: "Agenda" },
+  { href: "#pkb", label: "PKB" },
   { href: "#struktur", label: "Struktur" },
   { href: "#aduan", label: "Aduan" },
 ];
@@ -40,6 +42,13 @@ const Navbar = () => {
                 {link.label}
               </a>
             ))}
+            <Link
+              to="/auth"
+              className="ml-2 px-4 py-2 text-sm text-white/80 hover:text-white hover:bg-white/10 rounded-lg transition-colors flex items-center gap-1"
+            >
+              <Lock className="w-4 h-4" />
+              Admin
+            </Link>
           </div>
 
           {/* Mobile Menu Button */}
@@ -67,6 +76,14 @@ const Navbar = () => {
                   {link.label}
                 </a>
               ))}
+              <Link
+                to="/auth"
+                onClick={() => setIsOpen(false)}
+                className="px-4 py-3 text-sm text-white/80 hover:text-white hover:bg-white/10 rounded-lg transition-colors flex items-center gap-2"
+              >
+                <Lock className="w-4 h-4" />
+                Admin
+              </Link>
             </div>
           </div>
         )}
