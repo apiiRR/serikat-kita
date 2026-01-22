@@ -5,7 +5,7 @@ import { Link } from "react-router-dom";
 
 const navLinks = [
   { href: "#pengumuman", label: "Pengumuman" },
-  { href: "#agenda", label: "Agenda" },
+  // { href: "#agenda", label: "Agenda" },
   { href: "#pkb", label: "PKB" },
   { href: "#struktur", label: "Struktur" },
   { href: "#aduan", label: "Aduan" },

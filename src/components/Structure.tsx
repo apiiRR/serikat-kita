@@ -7,7 +7,6 @@ import { supabase } from "@/integrations/supabase/client";
 interface Member {
   id: string;
   name: string;
-  position: string;
   department: string;
   level: number;
   avatar_url: string | null;
@@ -81,35 +80,28 @@ const Structure = () => {
     );
   }
 
-  // Kategori berdasarkan struktur yang diminta
-  const chairman = members.find((m) => m.level === 1); // Ketua Umum
+  const chairman = members.find((m) => m.level === 1);
   
   const coreManagement = members.filter((m) => 
-    m.level === 2 && (
-      m.position.toLowerCase().includes("sekretaris") ||
-      m.position.toLowerCase().includes("bendahara")
-    )
+    m.level === 2
   );
   
   const departments = members.filter((m) => m.level === 3);
 
-  // Mapping posisi ke nama bidang untuk kategorisasi
-  const getDepartmentCategory = (position: string, department: string) => {
-    const pos = position.toLowerCase();
+  const getDepartmentCategory = (department: string) => {
     const dept = department.toLowerCase();
     
-    if (pos.includes("hubungan kerja") || pos.includes("pkb")) return "Bidang Hubungan Kerja & PKB";
-    if (pos.includes("pelatihan") || pos.includes("pengembangan")) return "Bidang Pelatihan & Pengembangan Anggota";
-    if (pos.includes("advokasi") || pos.includes("kebijakan") || pos.includes("hukum")) return "Bidang Advokasi Pekerja & Kebijakan Hukum";
-    if (pos.includes("komunikasi") || pos.includes("informasi")) return "Bidang Komunikasi & Informasi";
-    if (pos.includes("kesejahteraan") || pos.includes("strategis")) return "Bidang Kesejahteraan Pegawai & Isu Strategis";
+    if (dept.includes("hubungan kerja") || dept.includes("pkb")) return "Bidang Hubungan Kerja & PKB";
+    if (dept.includes("pelatihan") || dept.includes("pengembangan")) return "Bidang Pelatihan & Pengembangan Anggota";
+    if (dept.includes("advokasi") || dept.includes("kebijakan") || dept.includes("hukum")) return "Bidang Advokasi Pekerja & Kebijakan Hukum";
+    if (dept.includes("komunikasi") || dept.includes("informasi")) return "Bidang Komunikasi & Informasi";
+    if (dept.includes("kesejahteraan") || dept.includes("strategis")) return "Bidang Kesejahteraan Pegawai & Isu Strategis";
     
     return department || "Bidang";
   };
 
-  // Kelompokkan departments berdasarkan kategori
   const departmentsByCategory = departments.reduce((acc, person) => {
-    const category = getDepartmentCategory(person.position, person.department);
+    const category = getDepartmentCategory(person.department);
     if (!acc[category]) {
       acc[category] = [];
     }
@@ -134,14 +126,12 @@ const Structure = () => {
         </div>
 
         <div className="grid lg:grid-cols-2 gap-8 max-w-6xl mx-auto">
-          {/* Kolom 1: PENGURUS INTI */}
           <div className="space-y-6">
             <div className="flex items-center gap-2 mb-4">
               <Shield className="w-5 h-5 text-primary" />
               <h3 className="text-xl font-bold text-foreground">Pengurus Inti</h3>
             </div>
             
-            {/* Ketua Umum */}
             {chairman && (
               <Card className="card-gradient shadow-elevated border-2 border-primary/30">
                 <CardContent className="pt-6 text-center">
@@ -158,9 +148,6 @@ const Structure = () => {
                   <h3 className="text-xl font-bold text-foreground">
                     {chairman.name}
                   </h3>
-                  <p className="text-primary font-semibold text-lg">
-                    {chairman.position}
-                  </p>
                   <p className="text-sm text-muted-foreground mt-1">
                     {chairman.department}
                   </p>
@@ -168,7 +155,6 @@ const Structure = () => {
               </Card>
             )}
 
-            {/* Sekretaris & Bendahara */}
             <div className="grid gap-4">
               {coreManagement.map((person) => (
                 <Card
@@ -186,9 +172,6 @@ const Structure = () => {
                         <h3 className="font-bold text-foreground">
                           {person.name}
                         </h3>
-                        <p className="text-secondary font-semibold">
-                          {person.position}
-                        </p>
                         <p className="text-xs text-muted-foreground">
                           {person.department}
                         </p>
@@ -200,7 +183,6 @@ const Structure = () => {
             </div>
           </div>
 
-          {/* Kolom 2: BIDANG-BIDANG */}
           <div className="space-y-6">
             <div className="flex items-center gap-2 mb-4">
               <Users className="w-5 h-5 text-primary" />
@@ -229,9 +211,6 @@ const Structure = () => {
                             <h3 className="font-semibold text-foreground group-hover:text-primary transition-colors truncate">
                               {person.name}
                             </h3>
-                            <p className="text-sm text-muted-foreground truncate">
-                              {person.position}
-                            </p>
                           </div>
                         </div>
                       </CardContent>

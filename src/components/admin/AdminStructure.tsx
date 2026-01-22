@@ -30,6 +30,17 @@ interface Member {
   sort_order: number;
 }
 
+const departmentOptions = [
+  "Chairman",
+  "Sekretaris Jenderal",
+  "Sekretaris Umum & Bendahara",
+  "Bidang Hubungan Kerja & PKB",
+  "Bidang Pelatihan & Pengembangan Anggota",
+  "Bidang Advokasi Pekerja & Kebijakan Hukum",
+  "Bidang Komunikasi & Informasi",
+  "Bidang Kesejahteraan Pegawai & Isu Strategis",
+];
+
 const AdminStructure = () => {
   const { toast } = useToast();
   const [members, setMembers] = useState<Member[]>([]);
@@ -38,7 +49,6 @@ const AdminStructure = () => {
   const [editingId, setEditingId] = useState<string | null>(null);
   const [formData, setFormData] = useState({
     name: "",
-    position: "",
     department: "",
     level: "3",
     sort_order: "0",
@@ -70,7 +80,6 @@ const AdminStructure = () => {
   const resetForm = () => {
     setFormData({
       name: "",
-      position: "",
       department: "",
       level: "3",
       sort_order: "0",
@@ -81,10 +90,10 @@ const AdminStructure = () => {
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
 
-    if (!formData.name || !formData.position || !formData.department) {
+    if (!formData.name || !formData.department) {
       toast({
         title: "Error",
-        description: "Nama, jabatan, dan departemen harus diisi",
+        description: "Nama dan departemen/bidang harus diisi",
         variant: "destructive",
       });
       return;
@@ -92,7 +101,7 @@ const AdminStructure = () => {
 
     const payload = {
       name: formData.name,
-      position: formData.position,
+      position: formData.department,
       department: formData.department,
       level: parseInt(formData.level),
       sort_order: parseInt(formData.sort_order),
@@ -137,7 +146,6 @@ const AdminStructure = () => {
   const handleEdit = (member: Member) => {
     setFormData({
       name: member.name,
-      position: member.position,
       department: member.department,
       level: member.level.toString(),
       sort_order: member.sort_order.toString(),
@@ -178,18 +186,23 @@ const AdminStructure = () => {
       .slice(0, 2);
   };
 
-  const getLevelLabel = (level: number) => {
-    switch (level) {
-      case 1:
-        return "Ketua Umum";
-      case 2:
-        return "Wakil Ketua";
-      case 3:
-        return "Pengurus";
-      default:
-        return "Anggota";
-    }
+  const getDepartmentCategory = (department: string) => {
+    const dept = department.toLowerCase();
+    
+    if (dept.includes("chairman") || dept.includes("ketua")) return "Pengurus Inti";
+    if (dept.includes("sekretaris") || dept.includes("bendahara")) return "Pengurus Inti";
+    
+    return department || "Bidang";
   };
+
+  const membersByCategory = members.reduce((acc, person) => {
+    const category = getDepartmentCategory(person.department);
+    if (!acc[category]) {
+      acc[category] = [];
+    }
+    acc[category].push(person);
+    return acc;
+  }, {} as Record<string, Member[]>);
 
   if (isLoading) {
     return <div className="text-center py-8">Memuat...</div>;
@@ -227,24 +240,24 @@ const AdminStructure = () => {
                 />
               </div>
               <div className="space-y-2">
-                <label className="text-sm font-medium">Jabatan</label>
-                <Input
-                  value={formData.position}
-                  onChange={(e) =>
-                    setFormData({ ...formData, position: e.target.value })
-                  }
-                  placeholder="Contoh: Ketua Umum, Sekretaris"
-                />
-              </div>
-              <div className="space-y-2">
                 <label className="text-sm font-medium">Departemen/Bidang</label>
-                <Input
+                <Select
                   value={formData.department}
-                  onChange={(e) =>
-                    setFormData({ ...formData, department: e.target.value })
+                  onValueChange={(value) =>
+                    setFormData({ ...formData, department: value })
                   }
-                  placeholder="Contoh: Kepemimpinan, Advokasi"
-                />
+                >
+                  <SelectTrigger>
+                    <SelectValue placeholder="Pilih departemen/bidang" />
+                  </SelectTrigger>
+                  <SelectContent>
+                    {departmentOptions.map((dept) => (
+                      <SelectItem key={dept} value={dept}>
+                        {dept}
+                      </SelectItem>
+                    ))}
+                  </SelectContent>
+                </Select>
               </div>
               <div className="grid grid-cols-2 gap-4">
                 <div className="space-y-2">
@@ -259,9 +272,9 @@ const AdminStructure = () => {
                       <SelectValue />
                     </SelectTrigger>
                     <SelectContent>
-                      <SelectItem value="1">1 - Ketua Umum</SelectItem>
-                      <SelectItem value="2">2 - Wakil Ketua</SelectItem>
-                      <SelectItem value="3">3 - Pengurus</SelectItem>
+                      <SelectItem value="1">1 - Chairman</SelectItem>
+                      <SelectItem value="2">2 - Sekretaris & Bendahara</SelectItem>
+                      <SelectItem value="3">3 - Bidang</SelectItem>
                     </SelectContent>
                   </Select>
                 </div>
@@ -293,54 +306,48 @@ const AdminStructure = () => {
         </Card>
       ) : (
         <div className="space-y-6">
-          {[1, 2, 3].map((level) => {
-            const levelMembers = members.filter((m) => m.level === level);
-            if (levelMembers.length === 0) return null;
-
-            return (
-              <div key={level}>
-                <h3 className="text-lg font-semibold mb-3">{getLevelLabel(level)}</h3>
-                <div className="grid sm:grid-cols-2 lg:grid-cols-3 gap-4">
-                  {levelMembers.map((member) => (
-                    <Card key={member.id}>
-                      <CardContent className="pt-4">
-                        <div className="flex items-center gap-4">
-                          <Avatar className="w-12 h-12">
-                            <AvatarFallback className="bg-primary text-primary-foreground">
-                              {getInitials(member.name)}
-                            </AvatarFallback>
-                          </Avatar>
-                          <div className="flex-1 min-w-0">
-                            <h4 className="font-semibold truncate">{member.name}</h4>
-                            <p className="text-sm text-primary">{member.position}</p>
-                            <p className="text-xs text-muted-foreground">
-                              {member.department}
-                            </p>
-                          </div>
-                          <div className="flex gap-1">
-                            <Button
-                              variant="ghost"
-                              size="icon"
-                              onClick={() => handleEdit(member)}
-                            >
-                              <Pencil className="w-4 h-4" />
-                            </Button>
-                            <Button
-                              variant="ghost"
-                              size="icon"
-                              onClick={() => handleDelete(member.id)}
-                            >
-                              <Trash2 className="w-4 h-4 text-destructive" />
-                            </Button>
-                          </div>
+          {Object.entries(membersByCategory).map(([category, people]) => (
+            <div key={category}>
+              <h3 className="text-lg font-semibold mb-3">{category}</h3>
+              <div className="grid sm:grid-cols-2 lg:grid-cols-3 gap-4">
+                {people.map((member) => (
+                  <Card key={member.id}>
+                    <CardContent className="pt-4">
+                      <div className="flex items-center gap-4">
+                        <Avatar className="w-12 h-12">
+                          <AvatarFallback className="bg-primary text-primary-foreground">
+                            {getInitials(member.name)}
+                          </AvatarFallback>
+                        </Avatar>
+                        <div className="flex-1 min-w-0">
+                          <h4 className="font-semibold truncate">{member.name}</h4>
+                          <p className="text-xs text-muted-foreground">
+                            {member.department}
+                          </p>
                         </div>
-                      </CardContent>
-                    </Card>
-                  ))}
-                </div>
+                        <div className="flex gap-1">
+                          <Button
+                            variant="ghost"
+                            size="icon"
+                            onClick={() => handleEdit(member)}
+                          >
+                            <Pencil className="w-4 h-4" />
+                          </Button>
+                          <Button
+                            variant="ghost"
+                            size="icon"
+                            onClick={() => handleDelete(member.id)}
+                          >
+                            <Trash2 className="w-4 h-4 text-destructive" />
+                          </Button>
+                        </div>
+                      </div>
+                    </CardContent>
+                  </Card>
+                ))}
               </div>
-            );
-          })}
+            </div>
+          ))}
         </div>
       )}
     </div>
@@ -348,3 +355,4 @@ const AdminStructure = () => {
 };
 
 export default AdminStructure;
+

@@ -1,22 +1,38 @@
-# TODO - Struktur Organisasi Kolom
+# TODO: Struktur Organisasi Updates
 
-## Task
+## Task Summary
+1. Remove position display from Structure.tsx public view
+2. Remove position input from AdminStructure.tsx and use dropdown with predefined department options
 
-Merubah struktur organisasi menjadi kolom-kolom berdasarkan bagian
+## Changes Required
 
-## Status: COMPLETED ✅
+### 1. Structure.tsx
+- [x] Remove position field from Member interface
+- [x] Remove position display from Ketua Umum card
+- [x] Remove position display from Sekretaris & Bendahara cards
+- [x] Remove position display from Bidang cards
+- [x] Update getDepartmentCategory to use department instead of position
 
-### Perubahan yang telah dilakukan:
+### 2. AdminStructure.tsx
+- [x] Remove position field from Member interface
+- [x] Remove position field from formData state
+- [x] Remove position from resetForm
+- [x] Remove position from handleSubmit validation
+- [x] Remove position from handleEdit
+- [x] Remove position from payload
+- [x] Remove position from admin list display
+- [x] Add departmentOptions array with predefined options
+- [x] Replace Input for "Departemen/Bidang" with Select dropdown
 
-1. ✅ Layout 2 kolom: "Pengurus Inti" dan "Bidang-Bidang"
-2. ✅ Kolom 1 (Pengurus Inti): Ketua Umum, Sekretaris Jenderal, Sekretaris Umum, Bendahara Umum
-3. ✅ Kolom 2 (Bidang-Bidang): 5 bidang sesuai struktur organisasi
-4. ✅ Auto-categorization berdasarkan posisi/departemen
-
-### Kategori Bidang:
-
+## Predefined Options
+- Ketua Umum
+- Sekretaris Jenderal
+- Sekretaris Umum & Bendahara
 - Bidang Hubungan Kerja & PKB
 - Bidang Pelatihan & Pengembangan Anggota
 - Bidang Advokasi Pekerja & Kebijakan Hukum
 - Bidang Komunikasi & Informasi
 - Bidang Kesejahteraan Pegawai & Isu Strategis
+
+## Status: ✅ All tasks completed
+
