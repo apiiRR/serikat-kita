@@ -1,0 +1,55 @@
+<!doctype html>
+<html lang="id">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Serikat Pekerja PT Berdikari</title>
+    <script>
+      // GitHub Pages SPA fallback - redirects all 404s to index.html
+      // preserving the original path so React Router can handle routing
+      (function () {
+        var path = window.location.pathname;
+        var hash = window.location.hash;
+        var search = window.location.search;
+
+        // Avoid redirect loop for index.html
+        if (path === "/" || path === "/index.html") {
+          window.location.href = "/" + search + hash;
+        } else {
+          // Redirect to index.html with original path as hash
+          // This allows React Router to read the path from hash
+          window.location.href = "/#" + path + search + hash;
+        }
+      })();
+    </script>
+    <noscript>
+      <meta http-equiv="refresh" content="0;url=/" />
+    </noscript>
+    <style>
+      body {
+        font-family:
+          system-ui,
+          -apple-system,
+          sans-serif;
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        min-height: 100vh;
+        margin: 0;
+        background: #f5f5f5;
+      }
+      .container {
+        text-align: center;
+      }
+      h1 {
+        margin-bottom: 1rem;
+      }
+    </style>
+  </head>
+  <body>
+    <div class="container">
+      <h1>Memuat...</h1>
+      <p>Sedang mengarahkan ke halaman...</p>
+    </div>
+  </body>
+</html>

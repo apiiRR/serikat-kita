@@ -2,7 +2,6 @@ import { useState, useEffect } from "react";
 import { Plus, Pencil, Trash2 } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
-import { Textarea } from "@/components/ui/textarea";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Switch } from "@/components/ui/switch";
 import {
@@ -21,6 +20,8 @@ import {
 } from "@/components/ui/select";
 import { useToast } from "@/hooks/use-toast";
 import { supabase } from "@/integrations/supabase/client";
+import ReactQuill from "react-quill";
+import "react-quill/dist/quill.snow.css";
 
 interface Announcement {
   id: string;
@@ -224,14 +225,17 @@ const AdminAnnouncements = () => {
               </div>
               <div className="space-y-2">
                 <label className="text-sm font-medium">Isi Pengumuman</label>
-                <Textarea
-                  value={formData.content}
-                  onChange={(e) =>
-                    setFormData({ ...formData, content: e.target.value })
-                  }
-                  placeholder="Isi pengumuman..."
-                  rows={4}
-                />
+                <div className="h-64">
+                  <ReactQuill
+                    theme="snow"
+                    value={formData.content}
+                    onChange={(value) =>
+                      setFormData({ ...formData, content: value })
+                    }
+                    className="h-48"
+                    placeholder="Isi pengumuman..."
+                  />
+                </div>
               </div>
               <div className="flex items-center gap-2">
                 <Switch

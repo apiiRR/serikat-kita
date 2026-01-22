@@ -152,3 +152,58 @@
     }
   }
 }
+
+/* React Quill Editor Styles */
+.ql-toolbar {
+  background: hsl(var(--background)) !important;
+  border-color: hsl(var(--border)) !important;
+  border-radius: var(--radius) var(--radius) 0 0 !important;
+}
+
+.ql-container {
+  background: hsl(var(--background)) !important;
+  border-color: hsl(var(--border)) !important;
+  border-radius: 0 0 var(--radius) var(--radius) !important;
+  font-family: 'Plus Jakarta Sans', sans-serif !important;
+  font-size: 0.875rem !important;
+}
+
+.ql-editor {
+  min-height: 150px !important;
+  line-height: 1.6 !important;
+}
+
+.ql-editor.ql-blank::before {
+  color: hsl(var(--muted-foreground)) !important;
+  font-style: normal !important;
+}
+
+/* Dark mode support for Quill */
+.dark .ql-toolbar,
+.dark .ql-container,
+.dark .ql-stroke {
+  stroke: hsl(var(--foreground)) !important;
+}
+
+.dark .ql-fill {
+  fill: hsl(var(--foreground)) !important;
+}
+
+.dark .ql-picker {
+  color: hsl(var(--foreground)) !important;
+}
+
+.dark .ql-picker-options {
+  background: hsl(var(--popover)) !important;
+  border-color: hsl(var(--border)) !important;
+}
+
+.dark .ql-toolbar button:hover .ql-stroke,
+.dark .ql-toolbar .ql-picker-label:hover .ql-stroke {
+  stroke: hsl(var(--primary)) !important;
+}
+
+.dark .ql-toolbar button:hover .ql-fill,
+.dark .ql-toolbar .ql-picker-label:hover .ql-fill {
+  fill: hsl(var(--primary)) !important;
+}
