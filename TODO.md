@@ -1,20 +1,22 @@
-# TODO - PKB Inline View Default
+# TODO - Struktur Organisasi Kolom
 
 ## Task
 
-Membuat dokumen PKB/PDF dapat dibaca secara langsung (inline view) tanpa perlu klik tombol tambahan, dengan dokumen terakhir (paling baru) terbuka secara default.
+Merubah struktur organisasi menjadi kolom-kolom berdasarkan bagian
 
 ## Status: COMPLETED ✅
 
-### Steps:
+### Perubahan yang telah dilakukan:
 
-- [x] 1. Analisis file PKBSection.tsx
-- [x] 2. Diskusi dengan user tentang preferensi UI
-- [x] 3. Implementasi perubahan pada PKBSection.tsx
-- [x] 4. Testing dan verifikasi
+1. ✅ Layout 2 kolom: "Pengurus Inti" dan "Bidang-Bidang"
+2. ✅ Kolom 1 (Pengurus Inti): Ketua Umum, Sekretaris Jenderal, Sekretaris Umum, Bendahara Umum
+3. ✅ Kolom 2 (Bidang-Bidang): 5 bidang sesuai struktur organisasi
+4. ✅ Auto-categorization berdasarkan posisi/departemen
 
-## Perubahan yang telah dilakukan:
+### Kategori Bidang:
 
-1. ✅ Ubah `expandedId` initial state dari `null` menjadi ID dokumen pertama (paling baru)
-2. ✅ Hapus tombol "Buka" yang membuka di tab baru karena dokumen sudah terlihat langsung
-3. ✅ Sesuaikan button layout untuk konsistensi UI
+- Bidang Hubungan Kerja & PKB
+- Bidang Pelatihan & Pengembangan Anggota
+- Bidang Advokasi Pekerja & Kebijakan Hukum
+- Bidang Komunikasi & Informasi
+- Bidang Kesejahteraan Pegawai & Isu Strategis
