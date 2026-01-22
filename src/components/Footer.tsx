@@ -73,19 +73,19 @@ const Footer = () => {
                   href="mailto:sp.berdikari@gmail.com"
                   className="hover:text-accent transition-colors"
                 >
-                  sp.berdikari@gmail.com
+                  serikat.pekerja@ptberdikari.co.id
                 </a>
               </li>
               <li className="flex items-center gap-2">
                 <Phone className="w-4 h-4 text-accent" />
-                <span>(021) 1234-5678</span>
+                <span>-</span>
               </li>
               <li className="flex items-start gap-2">
                 <MapPin className="w-4 h-4 text-accent mt-0.5" />
                 <span>
-                  Gedung A Lt. 2, PT Berdikari
+                  Graha Gabah, PT Berdikari
                   <br />
-                  Jl. Industri No. 123, Jakarta
+                  Jl. Pertani Gg. I No.22, Duren Tiga, Kec. Pancoran, Kota Jakarta Selatan, Daerah Khusus Ibukota Jakarta 12760
                 </span>
               </li>
             </ul>
@@ -94,12 +94,14 @@ const Footer = () => {
 
         <div className="border-t border-white/20 mt-8 pt-8 text-center text-sm text-white/60">
           <p>
-            © {currentYear} Serikat Pekerja PT Berdikari. Hak Cipta Dilindungi.
+            © {currentYear} Serikat Pekerja PT Berdikari. Made by Rafi Ramadhana.
           </p>
         </div>
       </div>
     </footer>
   );
 };
+
+
 
 export default Footer;

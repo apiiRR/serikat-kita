@@ -42,13 +42,13 @@ const Navbar = () => {
                 {link.label}
               </a>
             ))}
-            <Link
+            {/* <Link
               to="/auth"
               className="ml-2 px-4 py-2 text-sm text-white/80 hover:text-white hover:bg-white/10 rounded-lg transition-colors flex items-center gap-1"
             >
               <Lock className="w-4 h-4" />
               Admin
-            </Link>
+            </Link> */}
           </div>
 
           {/* Mobile Menu Button */}
@@ -76,14 +76,14 @@ const Navbar = () => {
                   {link.label}
                 </a>
               ))}
-              <Link
+              {/* <Link
                 to="/auth"
                 onClick={() => setIsOpen(false)}
                 className="px-4 py-3 text-sm text-white/80 hover:text-white hover:bg-white/10 rounded-lg transition-colors flex items-center gap-2"
               >
                 <Lock className="w-4 h-4" />
                 Admin
-              </Link>
+              </Link> */}
             </div>
           </div>
         )}

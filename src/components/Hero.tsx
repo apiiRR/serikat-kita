@@ -57,8 +57,8 @@ const Hero = () => {
         {/* Stats */}
         <div className="mt-16 grid grid-cols-3 gap-8 max-w-3xl mx-auto animate-slide-up">
           {[
-            { value: "500+", label: "Anggota Aktif" },
-            { value: "15", label: "Tahun Berdiri" },
+            { value: "150+", label: "Anggota Aktif" },
+            { value: "60", label: "Tahun Berdiri" },
             { value: "100%", label: "Komitmen" },
           ].map((stat, index) => (
             <div key={index} className="text-center">

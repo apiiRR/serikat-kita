@@ -26,6 +26,10 @@ const PKBSection = () => {
 
       if (!error && data) {
         setDocuments(data);
+        // Set dokumen pertama (paling baru) untuk terbuka secara default
+        if (data.length > 0) {
+          setExpandedId(data[0].id);
+        }
       }
       setIsLoading(false);
     };
@@ -105,17 +109,6 @@ const PKBSection = () => {
                       </p>
                     </div>
                     <div className="flex items-center gap-2">
-                      <Button
-                        variant="outline"
-                        size="sm"
-                        onClick={(e) => {
-                          e.stopPropagation();
-                          window.open(doc.file_url, "_blank");
-                        }}
-                      >
-                        <ExternalLink className="w-4 h-4 mr-1" />
-                        Buka
-                      </Button>
                       <Button
                         variant="ghost"
                         size="icon"
