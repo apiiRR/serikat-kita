@@ -1,0 +1,42 @@
+<!DOCTYPE html>
+<html lang="id">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Redirecting...</title>
+    <script>
+      // SPA 404 handler untuk GitHub Pages
+      // Redirect semua 404 ke index.html agar React Router dapat menangani route
+
+      (function () {
+        var redirect = sessionStorage.redirect;
+        // Preserve the hash (anchor) if it exists
+        var hash = window.location.hash;
+
+        // If we have a stored redirect, use it, otherwise redirect to root
+        var target =
+          redirect || window.location.origin + window.location.pathname;
+
+        // Remove the stored redirect to avoid infinite loops
+        if (redirect) {
+          sessionStorage.removeItem("redirect");
+        }
+
+        // Check if we're already on index.html to avoid loops
+        if (target.indexOf("index.html") === -1) {
+          // Store the current location to redirect after SPA loads
+          sessionStorage.redirect = window.location.href;
+        }
+
+        // Redirect to the target (which will be index.html with the path as hash or search)
+        window.location.replace(target);
+      })();
+    </script>
+    <noscript>
+      <meta http-equiv="refresh" content="0;url=./" />
+    </noscript>
+  </head>
+  <body>
+    <p>Redirecting...</p>
+  </body>
+</html>
