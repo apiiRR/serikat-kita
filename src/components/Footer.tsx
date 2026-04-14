@@ -1,7 +1,28 @@
 import { Mail, Phone, MapPin, Users } from "lucide-react";
+import { useState } from "react";
+
+const navLinks = [
+  { href: "#pengumuman", label: "Pengumuman" },
+  // { href: "#agenda", label: "Agenda" },
+  { href: "#pkb", label: "PKB" },
+  { href: "#struktur", label: "Struktur" },
+  { href: "#aduan", label: "Aduan" },
+];
 
 const Footer = () => {
   const currentYear = new Date().getFullYear();
+  const [isOpen, setIsOpen] = useState(false);
+  
+  const handleHashClick = (e: React.MouseEvent<HTMLAnchorElement>, href: string) => {
+      e.preventDefault();
+      const targetId = href.replace("#", "");
+      const element = document.getElementById(targetId);
+      
+      if (element) {
+        element.scrollIntoView({ behavior: "smooth", block: "start" });
+      }
+      setIsOpen(false);
+    };
 
   return (
     <footer className="hero-gradient text-white">
@@ -28,38 +49,18 @@ const Footer = () => {
           <div>
             <h4 className="font-semibold mb-4">Tautan Cepat</h4>
             <ul className="space-y-2 text-sm text-white/80">
+              {navLinks.map((link) => (
               <li>
                 <a
-                  href="#pengumuman"
+                    href={link.href}
+                    onClick={(e) => handleHashClick(e, link.href)}
                   className="hover:text-accent transition-colors"
                 >
-                  Pengumuman
+                  {link.label}
                 </a>
               </li>
-              <li>
-                <a
-                  href="#agenda"
-                  className="hover:text-accent transition-colors"
-                >
-                  Agenda
-                </a>
-              </li>
-              <li>
-                <a
-                  href="#struktur"
-                  className="hover:text-accent transition-colors"
-                >
-                  Struktur Organisasi
-                </a>
-              </li>
-              <li>
-                <a
-                  href="#aduan"
-                  className="hover:text-accent transition-colors"
-                >
-                  Layanan Aduan
-                </a>
-              </li>
+            ))}
+
             </ul>
           </div>
 
@@ -94,7 +95,7 @@ const Footer = () => {
 
         <div className="border-t border-white/20 mt-8 pt-8 text-center text-sm text-white/60">
           <p>
-            © {currentYear} Serikat Pekerja PT Berdikari. Made by Rafi Ramadhana.
+            © {currentYear} Serikat Pekerja PT Berdikari. Made by ❤️ Rafi Ramadhana.
           </p>
         </div>
       </div>
