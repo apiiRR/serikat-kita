@@ -8,6 +8,7 @@ const navLinks = [
   // { href: "#agenda", label: "Agenda" },
   { href: "#pkb", label: "PKB" },
   { href: "#struktur", label: "Struktur" },
+  { href: "#lks-bipartit", label: "LKS Bipartit" },
   { href: "#aduan", label: "Aduan" },
 ];
 
@@ -58,13 +59,13 @@ const Navbar = () => {
                 {link.label}
               </a>
             ))}
-            {/* <Link
+            <Link
               to="/auth"
               className="ml-2 px-4 py-2 text-sm text-white/80 hover:text-white hover:bg-white/10 rounded-lg transition-colors flex items-center gap-1"
             >
               <Lock className="w-4 h-4" />
               Admin
-            </Link> */}
+            </Link>
           </div>
 
           {/* Mobile Menu Button */}

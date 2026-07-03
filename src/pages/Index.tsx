@@ -4,6 +4,7 @@ import Announcements from "@/components/Announcements";
 import Agenda from "@/components/Agenda";
 import PKBSection from "@/components/PKBSection";
 import Structure from "@/components/Structure";
+import LKSBipartit from "@/components/LKSBipartit";
 import ComplaintForm from "@/components/ComplaintForm";
 import Footer from "@/components/Footer";
 
@@ -16,6 +17,7 @@ const Index = () => {
       {/* <Agenda /> */}
       <PKBSection />
       <Structure />
+      <LKSBipartit />
       <ComplaintForm />
       <Footer />
     </div>

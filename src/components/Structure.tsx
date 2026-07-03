@@ -1,5 +1,15 @@
 import { useState, useEffect } from "react";
-import { User, Users, Crown, Shield } from "lucide-react";
+import {
+  BriefcaseBusiness,
+  Crown,
+  GraduationCap,
+  HeartHandshake,
+  Megaphone,
+  Scale,
+  Shield,
+  Users,
+} from "lucide-react";
+import type { LucideIcon } from "lucide-react";
 import { Card, CardContent } from "@/components/ui/card";
 import { Avatar, AvatarFallback } from "@/components/ui/avatar";
 import { supabase } from "@/integrations/supabase/client";
@@ -19,6 +29,61 @@ const getInitials = (name: string) => {
     .join("")
     .toUpperCase()
     .slice(0, 2);
+};
+
+const isLksBipartitMember = (department: string) => {
+  const dept = department.toLowerCase();
+
+  return (
+    dept.includes("lks") ||
+    dept.includes("bipartit") ||
+    dept.includes("bipartied")
+  );
+};
+
+const departmentMeta: Record<
+  string,
+  {
+    icon: LucideIcon;
+    iconClassName: string;
+    badgeClassName: string;
+  }
+> = {
+  "Bidang Hubungan Kerja & PKB": {
+    icon: BriefcaseBusiness,
+    iconClassName: "text-secondary",
+    badgeClassName: "bg-secondary/10 border-secondary/20",
+  },
+  "Bidang Pelatihan & Pengembangan Anggota": {
+    icon: GraduationCap,
+    iconClassName: "text-emerald-600",
+    badgeClassName: "bg-emerald-50 border-emerald-200",
+  },
+  "Bidang Advokasi Pekerja & Kebijakan Hukum": {
+    icon: Scale,
+    iconClassName: "text-primary",
+    badgeClassName: "bg-primary/10 border-primary/20",
+  },
+  "Bidang Komunikasi & Informasi": {
+    icon: Megaphone,
+    iconClassName: "text-sky-600",
+    badgeClassName: "bg-sky-50 border-sky-200",
+  },
+  "Bidang Kesejahteraan Pegawai & Isu Strategis": {
+    icon: HeartHandshake,
+    iconClassName: "text-accent-foreground",
+    badgeClassName: "bg-accent/30 border-accent/40",
+  },
+};
+
+const getDepartmentMeta = (category: string) => {
+  return (
+    departmentMeta[category] || {
+      icon: Users,
+      iconClassName: "text-muted-foreground",
+      badgeClassName: "bg-muted border-border",
+    }
+  );
 };
 
 const Structure = () => {
@@ -80,22 +145,40 @@ const Structure = () => {
     );
   }
 
-  const chairman = members.find((m) => m.level === 1);
+  const organizationMembers = members.filter(
+    (m) => !isLksBipartitMember(m.department)
+  );
+
+  const chairman = organizationMembers.find((m) => m.level === 1);
   
-  const coreManagement = members.filter((m) => 
+  const coreManagement = organizationMembers.filter((m) => 
     m.level === 2
   );
   
-  const departments = members.filter((m) => m.level === 3);
+  const departments = organizationMembers.filter((m) => m.level === 3);
 
   const getDepartmentCategory = (department: string) => {
     const dept = department.toLowerCase();
     
-    if (dept.includes("hubungan kerja") || dept.includes("pkb")) return "Bidang Hubungan Kerja & PKB";
-    if (dept.includes("pelatihan") || dept.includes("pengembangan")) return "Bidang Pelatihan & Pengembangan Anggota";
-    if (dept.includes("advokasi") || dept.includes("kebijakan") || dept.includes("hukum")) return "Bidang Advokasi Pekerja & Kebijakan Hukum";
-    if (dept.includes("komunikasi") || dept.includes("informasi")) return "Bidang Komunikasi & Informasi";
-    if (dept.includes("kesejahteraan") || dept.includes("strategis")) return "Bidang Kesejahteraan Pegawai & Isu Strategis";
+    if (dept.includes("hubungan kerja") || dept.includes("pkb")) {
+      return "Bidang Hubungan Kerja & PKB";
+    }
+    if (dept.includes("pelatihan") || dept.includes("pengembangan")) {
+      return "Bidang Pelatihan & Pengembangan Anggota";
+    }
+    if (
+      dept.includes("advokasi") ||
+      dept.includes("kebijakan") ||
+      dept.includes("hukum")
+    ) {
+      return "Bidang Advokasi Pekerja & Kebijakan Hukum";
+    }
+    if (dept.includes("komunikasi") || dept.includes("informasi")) {
+      return "Bidang Komunikasi & Informasi";
+    }
+    if (dept.includes("kesejahteraan") || dept.includes("strategis")) {
+      return "Bidang Kesejahteraan Pegawai & Isu Strategis";
+    }
     
     return department || "Bidang";
   };
@@ -129,7 +212,7 @@ const Structure = () => {
           <div className="space-y-6">
             <div className="flex items-center gap-2 mb-4">
               <Shield className="w-5 h-5 text-primary" />
-              <h3 className="text-xl font-bold text-foreground">Pengurus Inti</h3>
+              <h3 className="text-xl font-bold text-foreground">Pengurus Utama</h3>
             </div>
             
             {chairman && (
@@ -189,42 +272,54 @@ const Structure = () => {
               <h3 className="text-xl font-bold text-foreground">Bidang-Bidang</h3>
             </div>
 
-            {Object.entries(departmentsByCategory).map(([category, people]) => (
-              <div key={category} className="space-y-3">
-                <h4 className="text-sm font-semibold text-muted-foreground uppercase tracking-wider">
-                  {category}
-                </h4>
-                <div className="grid gap-3">
-                  {people.map((person) => (
-                    <Card
-                      key={person.id}
-                      className="card-gradient shadow-card border-border/50 hover:shadow-elevated transition-all duration-300 group"
+            {Object.entries(departmentsByCategory).map(([category, people]) => {
+              const meta = getDepartmentMeta(category);
+              const DepartmentIcon = meta.icon;
+
+              return (
+                <div key={category} className="space-y-3">
+                  <div className="flex items-center gap-3">
+                    <div
+                      className={`flex h-9 w-9 items-center justify-center rounded-lg border ${meta.badgeClassName}`}
                     >
-                      <CardContent className="p-4">
-                        <div className="flex items-center gap-4">
-                          <Avatar className="w-12 h-12 border border-muted">
-                            <AvatarFallback className="bg-muted text-muted-foreground font-semibold">
-                              {getInitials(person.name)}
-                            </AvatarFallback>
-                          </Avatar>
-                          <div className="flex-1 min-w-0">
-                            <h3 className="font-semibold text-foreground group-hover:text-primary transition-colors truncate">
-                              {person.name}
-                            </h3>
+                      <DepartmentIcon className={`w-5 h-5 ${meta.iconClassName}`} />
+                    </div>
+                    <h4 className="text-sm font-semibold text-foreground uppercase tracking-wider">
+                      {category}
+                    </h4>
+                  </div>
+                  <div className="grid gap-3">
+                    {people.map((person) => (
+                      <Card
+                        key={person.id}
+                        className="card-gradient shadow-card border-border/50 hover:shadow-elevated transition-all duration-300 group"
+                      >
+                        <CardContent className="p-4">
+                          <div className="flex items-center gap-4">
+                            <Avatar className="w-12 h-12 border border-muted">
+                              <AvatarFallback className="bg-muted text-muted-foreground font-semibold">
+                                {getInitials(person.name)}
+                              </AvatarFallback>
+                            </Avatar>
+                            <div className="flex-1 min-w-0">
+                              <h3 className="font-semibold text-foreground group-hover:text-primary transition-colors truncate">
+                                {person.name}
+                              </h3>
+                            </div>
                           </div>
-                        </div>
-                      </CardContent>
-                    </Card>
-                  ))}
+                        </CardContent>
+                      </Card>
+                    ))}
+                  </div>
                 </div>
-              </div>
-            ))}
+              );
+            })}
           </div>
         </div>
+
       </div>
     </section>
   );
 };
 
 export default Structure;
-

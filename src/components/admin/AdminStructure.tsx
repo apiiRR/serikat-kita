@@ -189,13 +189,27 @@ const AdminStructure = () => {
   const getDepartmentCategory = (department: string) => {
     const dept = department.toLowerCase();
     
-    if (dept.includes("chairman") || dept.includes("ketua")) return "Pengurus Inti";
-    if (dept.includes("sekretaris") || dept.includes("bendahara")) return "Pengurus Inti";
+    if (dept.includes("chairman") || dept.includes("ketua")) return "Pengurus Utama";
+    if (dept.includes("sekretaris") || dept.includes("bendahara")) return "Pengurus Utama";
     
     return department || "Bidang";
   };
 
-  const membersByCategory = members.reduce((acc, person) => {
+  const isLksBipartitMember = (department: string) => {
+    const dept = department.toLowerCase();
+
+    return (
+      dept.includes("lks") ||
+      dept.includes("bipartit") ||
+      dept.includes("bipartied")
+    );
+  };
+
+  const structureMembers = members.filter(
+    (member) => !isLksBipartitMember(member.department)
+  );
+
+  const membersByCategory = structureMembers.reduce((acc, person) => {
     const category = getDepartmentCategory(person.department);
     if (!acc[category]) {
       acc[category] = [];
@@ -298,7 +312,7 @@ const AdminStructure = () => {
         </Dialog>
       </div>
 
-      {members.length === 0 ? (
+      {structureMembers.length === 0 ? (
         <Card>
           <CardContent className="py-8 text-center text-muted-foreground">
             Belum ada data struktur organisasi. Klik tombol "Tambah Anggota" untuk memulai.
@@ -355,4 +369,3 @@ const AdminStructure = () => {
 };
 
 export default AdminStructure;
-

@@ -1,4 +1,4 @@
-import { Users, Shield, Megaphone } from "lucide-react";
+import { Megaphone, Shield, Users } from "lucide-react";
 import { Button } from "@/components/ui/button";
 
 const Hero = () => {
@@ -30,8 +30,9 @@ const Hero = () => {
           </h2>
 
           <p className="text-lg md:text-xl text-white/90 max-w-2xl mx-auto mb-10 leading-relaxed">
-            Bersatu untuk kesejahteraan bersama. Melindungi hak-hak pekerja, 
-            memperjuangkan keadilan, dan membangun masa depan yang lebih baik.
+            Punya aduan atau aspirasi kerja? Sampaikan langsung melalui
+            platform resmi ini agar setiap persoalan tercatat, ditindaklanjuti,
+            dan tidak berkembang menjadi isu liar.
           </p>
 
           <div className="flex flex-col sm:flex-row gap-4 justify-center">
@@ -57,7 +58,7 @@ const Hero = () => {
         {/* Stats */}
         <div className="mt-16 grid grid-cols-3 gap-8 max-w-3xl mx-auto animate-slide-up">
           {[
-            { value: "150+", label: "Anggota Aktif" },
+            { value: "120+", label: "Anggota Aktif" },
             { value: "60", label: "Tahun Berdiri" },
             { value: "100%", label: "Komitmen" },
           ].map((stat, index) => (
