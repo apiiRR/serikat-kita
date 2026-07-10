@@ -9,6 +9,7 @@ import {
   LogOut,
   Home,
   UserCheck,
+  Phone,
 } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
@@ -17,6 +18,7 @@ import AdminAnnouncements from "@/components/admin/AdminAnnouncements";
 import AdminAgenda from "@/components/admin/AdminAgenda";
 import AdminStructure from "@/components/admin/AdminStructure";
 import AdminLKSBipartit from "@/components/admin/AdminLKSBipartit";
+import AdminHotline from "@/components/admin/AdminHotline";
 import AdminComplaints from "@/components/admin/AdminComplaints";
 import AdminDocuments from "@/components/admin/AdminDocuments";
 
@@ -117,7 +119,7 @@ const Admin = () => {
       {/* Main Content */}
       <main className="container px-4 py-8">
         <Tabs value={activeTab} onValueChange={setActiveTab}>
-          <TabsList className="grid w-full grid-cols-6 mb-8">
+          <TabsList className="grid w-full grid-cols-7 mb-8">
             <TabsTrigger value="announcements" className="flex items-center gap-2">
               <Bell className="w-4 h-4" />
               <span className="hidden sm:inline">Pengumuman</span>
@@ -133,6 +135,10 @@ const Admin = () => {
             <TabsTrigger value="lks-bipartit" className="flex items-center gap-2">
               <UserCheck className="w-4 h-4" />
               <span className="hidden sm:inline">LKS</span>
+            </TabsTrigger>
+            <TabsTrigger value="hotline" className="flex items-center gap-2">
+              <Phone className="w-4 h-4" />
+              <span className="hidden sm:inline">Hotline</span>
             </TabsTrigger>
             <TabsTrigger value="documents" className="flex items-center gap-2">
               <FileText className="w-4 h-4" />
@@ -155,6 +161,9 @@ const Admin = () => {
           </TabsContent>
           <TabsContent value="lks-bipartit">
             <AdminLKSBipartit />
+          </TabsContent>
+          <TabsContent value="hotline">
+            <AdminHotline />
           </TabsContent>
           <TabsContent value="documents">
             <AdminDocuments />

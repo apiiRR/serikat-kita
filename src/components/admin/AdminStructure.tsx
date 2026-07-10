@@ -1,7 +1,8 @@
 import { useState, useEffect } from "react";
-import { Plus, Pencil, Trash2 } from "lucide-react";
+import { ClipboardList, Plus, Pencil, Trash2 } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
+import { Textarea } from "@/components/ui/textarea";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Avatar, AvatarFallback } from "@/components/ui/avatar";
 import {
@@ -26,6 +27,7 @@ interface Member {
   name: string;
   position: string;
   department: string;
+  jobdesk: string | null;
   level: number;
   sort_order: number;
 }
@@ -50,6 +52,7 @@ const AdminStructure = () => {
   const [formData, setFormData] = useState({
     name: "",
     department: "",
+    jobdesk: "",
     level: "3",
     sort_order: "0",
   });
@@ -81,6 +84,7 @@ const AdminStructure = () => {
     setFormData({
       name: "",
       department: "",
+      jobdesk: "",
       level: "3",
       sort_order: "0",
     });
@@ -103,6 +107,7 @@ const AdminStructure = () => {
       name: formData.name,
       position: formData.department,
       department: formData.department,
+      jobdesk: formData.jobdesk.trim() || null,
       level: parseInt(formData.level),
       sort_order: parseInt(formData.sort_order),
     };
@@ -147,6 +152,7 @@ const AdminStructure = () => {
     setFormData({
       name: member.name,
       department: member.department,
+      jobdesk: member.jobdesk || "",
       level: member.level.toString(),
       sort_order: member.sort_order.toString(),
     });
@@ -218,6 +224,17 @@ const AdminStructure = () => {
     return acc;
   }, {} as Record<string, Member[]>);
 
+  const getDivisionJobdesk = (people: Member[]) => {
+    return people.find((person) => person.jobdesk?.trim())?.jobdesk || null;
+  };
+
+  const getJobdeskItems = (jobdesk: string) => {
+    return jobdesk
+      .split(/\r?\n/)
+      .map((item) => item.trim())
+      .filter(Boolean);
+  };
+
   if (isLoading) {
     return <div className="text-center py-8">Memuat...</div>;
   }
@@ -273,6 +290,19 @@ const AdminStructure = () => {
                   </SelectContent>
                 </Select>
               </div>
+              <div className="space-y-2">
+                <label className="text-sm font-medium">Deskripsi Jobdesk Divisi</label>
+                <Textarea
+                  value={formData.jobdesk}
+                  onChange={(e) =>
+                    setFormData({ ...formData, jobdesk: e.target.value })
+                  }
+                  placeholder="Tuliskan ringkasan tugas, fungsi, atau ruang lingkup bidang/divisi"
+                />
+                <p className="text-xs text-muted-foreground">
+                  Tekan Enter untuk membuat poin baru. Deskripsi ini ditampilkan sebagai jobdesk bidang/divisi, bukan deskripsi personal anggota.
+                </p>
+              </div>
               <div className="grid grid-cols-2 gap-4">
                 <div className="space-y-2">
                   <label className="text-sm font-medium">Level Hierarki</label>
@@ -320,9 +350,30 @@ const AdminStructure = () => {
         </Card>
       ) : (
         <div className="space-y-6">
-          {Object.entries(membersByCategory).map(([category, people]) => (
+          {Object.entries(membersByCategory).map(([category, people]) => {
+            const divisionJobdesk = getDivisionJobdesk(people);
+            const jobdeskItems = divisionJobdesk
+              ? getJobdeskItems(divisionJobdesk)
+              : [];
+
+            return (
             <div key={category}>
-              <h3 className="text-lg font-semibold mb-3">{category}</h3>
+              <div className="mb-3 space-y-2">
+                <h3 className="text-lg font-semibold">{category}</h3>
+                {jobdeskItems.length > 0 && (
+                  <div className="rounded-lg border bg-muted/40 p-3">
+                    <div className="flex items-center gap-2 text-xs font-semibold text-primary mb-1">
+                      <ClipboardList className="w-4 h-4" />
+                      Jobdesk Divisi
+                    </div>
+                    <ul className="list-disc space-y-1 pl-5 text-sm text-muted-foreground">
+                      {jobdeskItems.map((item) => (
+                        <li key={item}>{item}</li>
+                      ))}
+                    </ul>
+                  </div>
+                )}
+              </div>
               <div className="grid sm:grid-cols-2 lg:grid-cols-3 gap-4">
                 {people.map((member) => (
                   <Card key={member.id}>
@@ -361,7 +412,8 @@ const AdminStructure = () => {
                 ))}
               </div>
             </div>
-          ))}
+          );
+          })}
         </div>
       )}
     </div>

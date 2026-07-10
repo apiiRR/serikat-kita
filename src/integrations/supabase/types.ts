@@ -149,12 +149,43 @@ export type Database = {
         }
         Relationships: []
       }
+      hotline_contacts: {
+        Row: {
+          created_at: string
+          id: string
+          name: string
+          phone: string
+          role: string | null
+          sort_order: number
+          updated_at: string
+        }
+        Insert: {
+          created_at?: string
+          id?: string
+          name: string
+          phone: string
+          role?: string | null
+          sort_order?: number
+          updated_at?: string
+        }
+        Update: {
+          created_at?: string
+          id?: string
+          name?: string
+          phone?: string
+          role?: string | null
+          sort_order?: number
+          updated_at?: string
+        }
+        Relationships: []
+      }
       organization_structure: {
         Row: {
           avatar_url: string | null
           created_at: string
           department: string
           id: string
+          jobdesk: string | null
           level: number
           name: string
           parent_id: string | null
@@ -167,6 +198,7 @@ export type Database = {
           created_at?: string
           department: string
           id?: string
+          jobdesk?: string | null
           level?: number
           name: string
           parent_id?: string | null
@@ -179,6 +211,7 @@ export type Database = {
           created_at?: string
           department?: string
           id?: string
+          jobdesk?: string | null
           level?: number
           name?: string
           parent_id?: string | null

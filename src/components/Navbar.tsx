@@ -9,6 +9,7 @@ const navLinks = [
   { href: "#pkb", label: "PKB" },
   { href: "#struktur", label: "Struktur" },
   { href: "#lks-bipartit", label: "LKS Bipartit" },
+  { href: "#hotline", label: "Hotline" },
   { href: "#aduan", label: "Aduan" },
 ];
 

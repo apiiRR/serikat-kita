@@ -1,6 +1,7 @@
 import { useState, useEffect } from "react";
 import {
   BriefcaseBusiness,
+  ClipboardList,
   Crown,
   GraduationCap,
   HeartHandshake,
@@ -18,6 +19,7 @@ interface Member {
   id: string;
   name: string;
   department: string;
+  jobdesk: string | null;
   level: number;
   avatar_url: string | null;
 }
@@ -84,6 +86,17 @@ const getDepartmentMeta = (category: string) => {
       badgeClassName: "bg-muted border-border",
     }
   );
+};
+
+const getDivisionJobdesk = (people: Member[]) => {
+  return people.find((person) => person.jobdesk?.trim())?.jobdesk || null;
+};
+
+const getJobdeskItems = (jobdesk: string) => {
+  return jobdesk
+    .split(/\r?\n/)
+    .map((item) => item.trim())
+    .filter(Boolean);
 };
 
 const Structure = () => {
@@ -275,18 +288,37 @@ const Structure = () => {
             {Object.entries(departmentsByCategory).map(([category, people]) => {
               const meta = getDepartmentMeta(category);
               const DepartmentIcon = meta.icon;
+              const divisionJobdesk = getDivisionJobdesk(people);
+              const jobdeskItems = divisionJobdesk
+                ? getJobdeskItems(divisionJobdesk)
+                : [];
 
               return (
                 <div key={category} className="space-y-3">
-                  <div className="flex items-center gap-3">
-                    <div
-                      className={`flex h-9 w-9 items-center justify-center rounded-lg border ${meta.badgeClassName}`}
-                    >
-                      <DepartmentIcon className={`w-5 h-5 ${meta.iconClassName}`} />
+                  <div className="space-y-3">
+                    <div className="flex items-center gap-3">
+                      <div
+                        className={`flex h-9 w-9 items-center justify-center rounded-lg border ${meta.badgeClassName}`}
+                      >
+                        <DepartmentIcon className={`w-5 h-5 ${meta.iconClassName}`} />
+                      </div>
+                      <h4 className="text-sm font-semibold text-foreground uppercase tracking-wider">
+                        {category}
+                      </h4>
                     </div>
-                    <h4 className="text-sm font-semibold text-foreground uppercase tracking-wider">
-                      {category}
-                    </h4>
+                    {jobdeskItems.length > 0 && (
+                      <div className="rounded-lg border border-primary/10 bg-primary/5 p-3">
+                        <div className="flex items-center gap-2 text-xs font-semibold text-primary mb-1">
+                          <ClipboardList className="w-4 h-4" />
+                          Jobdesk Divisi
+                        </div>
+                        <ul className="list-disc space-y-1 pl-5 text-sm text-muted-foreground leading-relaxed">
+                          {jobdeskItems.map((item) => (
+                            <li key={item}>{item}</li>
+                          ))}
+                        </ul>
+                      </div>
+                    )}
                   </div>
                   <div className="grid gap-3">
                     {people.map((person) => (
