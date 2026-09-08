@@ -1,6 +1,7 @@
 import { useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
 import {
+  Images,
   Users,
   Bell,
   CalendarDays,
@@ -14,6 +15,7 @@ import {
 import { Button } from "@/components/ui/button";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import { useAuth } from "@/hooks/useAuth";
+import AdminGallery from "@/components/admin/AdminGallery";
 import AdminAnnouncements from "@/components/admin/AdminAnnouncements";
 import AdminAgenda from "@/components/admin/AdminAgenda";
 import AdminStructure from "@/components/admin/AdminStructure";
@@ -119,37 +121,39 @@ const Admin = () => {
       {/* Main Content */}
       <main className="container px-4 py-8">
         <Tabs value={activeTab} onValueChange={setActiveTab}>
-          <TabsList className="grid w-full grid-cols-7 mb-8">
+          <TabsList className="flex w-full justify-start overflow-x-auto h-auto mb-8 [&>button]:shrink-0 [&>button]:min-h-10 [&>button]:flex-1">
             <TabsTrigger value="announcements" className="flex items-center gap-2">
               <Bell className="w-4 h-4" />
-              <span className="hidden sm:inline">Pengumuman</span>
+              <span>Pengumuman</span>
             </TabsTrigger>
             <TabsTrigger value="agenda" className="flex items-center gap-2">
               <CalendarDays className="w-4 h-4" />
-              <span className="hidden sm:inline">Agenda</span>
+              <span>Agenda</span>
             </TabsTrigger>
             <TabsTrigger value="structure" className="flex items-center gap-2">
               <Users className="w-4 h-4" />
-              <span className="hidden sm:inline">Struktur</span>
+              <span>Struktur</span>
             </TabsTrigger>
             <TabsTrigger value="lks-bipartit" className="flex items-center gap-2">
               <UserCheck className="w-4 h-4" />
-              <span className="hidden sm:inline">LKS</span>
+              <span>LKS</span>
             </TabsTrigger>
             <TabsTrigger value="hotline" className="flex items-center gap-2">
               <Phone className="w-4 h-4" />
-              <span className="hidden sm:inline">Hotline</span>
+              <span>Hotline</span>
             </TabsTrigger>
             <TabsTrigger value="documents" className="flex items-center gap-2">
               <FileText className="w-4 h-4" />
-              <span className="hidden sm:inline">Dokumen</span>
+              <span>Dokumen</span>
             </TabsTrigger>
             <TabsTrigger value="complaints" className="flex items-center gap-2">
               <MessageSquare className="w-4 h-4" />
-              <span className="hidden sm:inline">Aduan</span>
+              <span>Aduan</span>
             </TabsTrigger>
+            <TabsTrigger value="gallery" className="flex items-center gap-2"><Images className="w-4 h-4" /><span>Galeri</span></TabsTrigger>
           </TabsList>
 
+          <TabsContent value="gallery"><AdminGallery /></TabsContent>
           <TabsContent value="announcements">
             <AdminAnnouncements />
           </TabsContent>

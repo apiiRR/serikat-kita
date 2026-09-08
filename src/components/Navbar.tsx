@@ -5,6 +5,7 @@ import { Link, useLocation } from "react-router-dom";
 
 const navLinks = [
   { href: "#pengumuman", label: "Pengumuman" },
+  { href: "#galeri", label: "Galeri" },
   // { href: "#agenda", label: "Agenda" },
   { href: "#pkb", label: "PKB" },
   { href: "#struktur", label: "Struktur" },
@@ -49,7 +50,7 @@ const Navbar = () => {
           </a>
 
           {/* Desktop Navigation */}
-          <div className="hidden md:flex items-center gap-1">
+          <div className="hidden lg:flex items-center gap-1">
             {navLinks.map((link) => (
               <a
                 key={link.href}
@@ -73,7 +74,7 @@ const Navbar = () => {
           <Button
             variant="ghost"
             size="icon"
-            className="md:hidden text-white hover:bg-white/10"
+            className="lg:hidden text-white hover:bg-white/10"
             onClick={() => setIsOpen(!isOpen)}
           >
             {isOpen ? <X className="w-5 h-5" /> : <Menu className="w-5 h-5" />}
@@ -82,7 +83,7 @@ const Navbar = () => {
 
         {/* Mobile Navigation */}
         {isOpen && (
-          <div className="md:hidden py-4 border-t border-white/10">
+          <div className="lg:hidden py-4 border-t border-white/10">
             <div className="flex flex-col gap-1">
               {navLinks.map((link) => (
                 <a

@@ -14,6 +14,18 @@ export type Database = {
   }
   public: {
     Tables: {
+      gallery_albums: {
+        Row: { id: string; name: string; created_at: string }
+        Insert: { id?: string; name: string; created_at?: string }
+        Update: { id?: string; name?: string; created_at?: string }
+        Relationships: []
+      }
+      gallery_photos: {
+        Row: { id: string; storage_path: string; caption: string; album_id: string | null; created_at: string }
+        Insert: { id?: string; storage_path: string; caption?: string; album_id?: string | null; created_at?: string }
+        Update: { id?: string; storage_path?: string; caption?: string; album_id?: string | null; created_at?: string }
+        Relationships: [{ foreignKeyName: "gallery_photos_album_id_fkey"; columns: ["album_id"]; isOneToOne: false; referencedRelation: "gallery_albums"; referencedColumns: ["id"] }]
+      }
       agenda: {
         Row: {
           created_at: string

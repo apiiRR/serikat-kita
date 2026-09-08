@@ -1,3 +1,4 @@
+import Gallery from "@/components/Gallery";
 import Navbar from "@/components/Navbar";
 import Hero from "@/components/Hero";
 import Announcements from "@/components/Announcements";
@@ -15,6 +16,7 @@ const Index = () => {
       <Navbar />
       <Hero />
       <Announcements />
+      <Gallery />
       {/* <Agenda /> */}
       <PKBSection />
       <Structure />

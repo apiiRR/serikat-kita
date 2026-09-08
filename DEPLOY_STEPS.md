@@ -75,3 +75,13 @@ Cukup jalankan:
 ```bash
 npm run deply
 ```
+
+## Migrasi Galeri (sebelum deploy frontend)
+
+1. Pada project Supabase yang digunakan website, jalankan isi file `supabase/migrations/20260908000100_add_gallery.sql` melalui SQL Editor. Alternatif untuk project yang sudah terhubung ke Supabase CLI: jalankan `supabase db push` setelah memeriksa migrasi tertunda.
+2. Pastikan tabel `gallery_albums`, `gallery_photos`, dan bucket publik `gallery` berhasil dibuat. Migrasi membutuhkan fungsi `public.is_admin()` dari migrasi awal. Bucket membatasi JPEG/PNG/WebP maksimal 5 MB per file.
+3. Verifikasi melalui sesi pengunjung bahwa data/foto bisa dibaca. Melalui sesi pengguna non-admin, pastikan insert/update/delete tabel, upload, dan delete file ditolak. Melalui akun admin, uji tambah album, unggah foto, edit, dan hapus.
+4. Jalankan `npm run build`, lalu deploy frontend mengikuti langkah di atas. Tidak diperlukan service-role key di frontend.
+5. Buka panel admin → Galeri. Buat album bila diperlukan, pilih beberapa foto, isi keterangan, lalu unggah. Foto berhasil langsung publik; tombol coba ulang hanya memproses foto tertunda/gagal. Menghapus album tidak menghapus foto.
+
+Jika upload gagal sebagian, pertahankan antrean dan coba ulang. Jika hapus file berhasil tetapi hapus metadata gagal, coba hapus foto yang sama lagi. Jika migrasi belum diterapkan, galeri menampilkan kegagalan memuat; terapkan migrasi kemudian pilih Coba lagi.
