@@ -14,6 +14,102 @@ export type Database = {
   }
   public: {
     Tables: {
+      document_download_requests: {
+        Row: {
+          id: string
+          document_id: string | null
+          document_name: string
+          requester_name: string
+          requester_email: string
+          decision: 'pending' | 'approved' | 'rejected'
+          email_status: 'not_sent' | 'sending' | 'sent' | 'failed' | 'unknown'
+          created_at: string
+          reviewed_at: string | null
+          reviewed_by: string | null
+          approved_storage_path: string | null
+          approved_document_name: string | null
+          current_attempt_id: string | null
+          sending_started_at: string | null
+          sent_at: string | null
+          link_expires_at: string | null
+          last_error: string | null
+        }
+        Insert: {
+          id?: string
+          document_id?: string | null
+          document_name: string
+          requester_name: string
+          requester_email: string
+          decision?: 'pending' | 'approved' | 'rejected'
+          email_status?: 'not_sent' | 'sending' | 'sent' | 'failed' | 'unknown'
+          created_at?: string
+          reviewed_at?: string | null
+          reviewed_by?: string | null
+          approved_storage_path?: string | null
+          approved_document_name?: string | null
+          current_attempt_id?: string | null
+          sending_started_at?: string | null
+          sent_at?: string | null
+          link_expires_at?: string | null
+          last_error?: string | null
+        }
+        Update: {
+          id?: string
+          document_id?: string | null
+          document_name?: string
+          requester_name?: string
+          requester_email?: string
+          decision?: 'pending' | 'approved' | 'rejected'
+          email_status?: 'not_sent' | 'sending' | 'sent' | 'failed' | 'unknown'
+          created_at?: string
+          reviewed_at?: string | null
+          reviewed_by?: string | null
+          approved_storage_path?: string | null
+          approved_document_name?: string | null
+          current_attempt_id?: string | null
+          sending_started_at?: string | null
+          sent_at?: string | null
+          link_expires_at?: string | null
+          last_error?: string | null
+        }
+        Relationships: [{ foreignKeyName: 'document_download_requests_document_id_fkey'; columns: ['document_id']; isOneToOne: false; referencedRelation: 'documents'; referencedColumns: ['id'] }]
+      }
+      document_email_attempts: {
+        Row: {
+          id: string
+          request_id: string
+          actor_id: string | null
+          status: 'sending' | 'sent' | 'failed' | 'unknown'
+          created_at: string
+          finished_at: string | null
+          link_expires_at: string | null
+          message_id: string | null
+          error_code: string | null
+        }
+        Insert: {
+          id: string
+          request_id: string
+          actor_id?: string | null
+          status?: 'sending' | 'sent' | 'failed' | 'unknown'
+          created_at?: string
+          finished_at?: string | null
+          link_expires_at?: string | null
+          message_id?: string | null
+          error_code?: string | null
+        }
+        Update: {
+          id?: string
+          request_id?: string
+          actor_id?: string | null
+          status?: 'sending' | 'sent' | 'failed' | 'unknown'
+          created_at?: string
+          finished_at?: string | null
+          link_expires_at?: string | null
+          message_id?: string | null
+          error_code?: string | null
+        }
+        Relationships: [{ foreignKeyName: 'document_email_attempts_request_id_fkey'; columns: ['request_id']; isOneToOne: false; referencedRelation: 'document_download_requests'; referencedColumns: ['id'] }]
+      }
       gallery_albums: {
         Row: { id: string; name: string; created_at: string }
         Insert: { id?: string; name: string; created_at?: string }
@@ -136,7 +232,7 @@ export type Database = {
           created_at: string
           description: string | null
           file_type: string
-          file_url: string
+          storage_path: string
           id: string
           name: string
           updated_at: string
@@ -145,7 +241,7 @@ export type Database = {
           created_at?: string
           description?: string | null
           file_type?: string
-          file_url: string
+          storage_path: string
           id?: string
           name: string
           updated_at?: string
@@ -154,7 +250,7 @@ export type Database = {
           created_at?: string
           description?: string | null
           file_type?: string
-          file_url?: string
+          storage_path?: string
           id?: string
           name?: string
           updated_at?: string
@@ -267,6 +363,13 @@ export type Database = {
       [_ in never]: never
     }
     Functions: {
+      list_document_catalog: {
+        Args: Record<PropertyKey, never>
+        Returns: { id: string; name: string; description: string | null; file_type: string; created_at: string }[]
+      }
+      submit_document_request: { Args: { p_document_id: string; p_name: string; p_email: string }; Returns: string }
+      claim_document_review: { Args: { p_request_id: string; p_actor: string; p_action: string; p_confirm_unknown?: boolean }; Returns: Json }
+      finish_document_email: { Args: { p_request_id: string; p_attempt_id: string; p_status: string; p_expires_at?: string | null; p_error?: string | null; p_message_id?: string | null }; Returns: undefined }
       is_admin: { Args: never; Returns: boolean }
     }
     Enums: {

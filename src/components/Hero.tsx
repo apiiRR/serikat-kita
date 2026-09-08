@@ -30,9 +30,9 @@ const Hero = () => {
           </h2>
 
           <p className="text-lg md:text-xl text-white/90 max-w-2xl mx-auto mb-10 leading-relaxed">
-            Punya aduan atau aspirasi kerja? Sampaikan langsung melalui
-            platform resmi ini agar setiap persoalan tercatat, ditindaklanjuti,
-            dan tidak berkembang menjadi isu liar.
+            Punya aduan atau aspirasi kerja? Sampaikan langsung melalui platform
+            resmi ini agar setiap persoalan tercatat, ditindaklanjuti, dan tidak
+            berkembang menjadi isu liar.
           </p>
 
           <div className="flex flex-col sm:flex-row gap-4 justify-center">
@@ -72,16 +72,6 @@ const Hero = () => {
             </div>
           ))}
         </div>
-      </div>
-
-      {/* Wave Divider */}
-      <div className="absolute bottom-0 left-0 right-0">
-        <svg viewBox="0 0 1440 120" fill="none" xmlns="http://www.w3.org/2000/svg">
-          <path
-            d="M0 120L60 105C120 90 240 60 360 45C480 30 600 30 720 37.5C840 45 960 60 1080 67.5C1200 75 1320 75 1380 75L1440 75V120H1380C1320 120 1200 120 1080 120C960 120 840 120 720 120C600 120 480 120 360 120C240 120 120 120 60 120H0Z"
-            className="fill-background"
-          />
-        </svg>
       </div>
     </section>
   );
