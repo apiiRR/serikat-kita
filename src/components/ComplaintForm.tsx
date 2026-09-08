@@ -104,10 +104,10 @@ const ComplaintForm = () => {
         <div className="text-center mb-12">
           <div className="inline-flex items-center gap-2 bg-primary/10 text-primary px-4 py-2 rounded-full text-sm font-medium mb-4">
             <Shield className="w-4 h-4" />
-            Layanan Aduan
+            Layanan Aduan & Aspirasi
           </div>
           <h2 className="text-3xl md:text-4xl font-bold text-foreground mb-4">
-            Sampaikan Aduan Anda
+            Sampaikan Aduan atau Aspirasi Anda
           </h2>
           <p className="text-muted-foreground max-w-2xl mx-auto">
             Kami siap mendengar dan menindaklanjuti setiap aduan dari anggota.
@@ -120,7 +120,7 @@ const ComplaintForm = () => {
             <CardHeader>
               <CardTitle className="flex items-center gap-2">
                 <CheckCircle className="w-5 h-5 text-primary" />
-                Formulir Aduan
+                Formulir Aduan atau Aspirasi
               </CardTitle>
             </CardHeader>
             <CardContent>
@@ -177,7 +177,7 @@ const ComplaintForm = () => {
                   </div>
                   <div className="space-y-2">
                     <label className="text-sm font-medium text-foreground">
-                      Kategori Aduan <span className="text-primary">*</span>
+                      Kategori Aduan atau Aspirasi<span className="text-primary">*</span>
                     </label>
                     <Select
                       value={formData.category}
@@ -212,10 +212,10 @@ const ComplaintForm = () => {
 
                 <div className="space-y-2">
                   <label className="text-sm font-medium text-foreground">
-                    Subjek Aduan <span className="text-primary">*</span>
+                    Subjek Aduan atau Aspirasi <span className="text-primary">*</span>
                   </label>
                   <Input
-                    placeholder="Ringkasan singkat aduan Anda"
+                    placeholder="Ringkasan singkat aduan atau aspirasi Anda"
                     value={formData.subject}
                     onChange={(e) =>
                       setFormData({ ...formData, subject: e.target.value })
@@ -229,10 +229,10 @@ const ComplaintForm = () => {
 
                 <div className="space-y-2">
                   <label className="text-sm font-medium text-foreground">
-                    Isi Aduan <span className="text-primary">*</span>
+                    Isi Aduan atau Aspirasi <span className="text-primary">*</span>
                   </label>
                   <Textarea
-                    placeholder="Jelaskan aduan Anda secara detail..."
+                    placeholder="Jelaskan aduan atau aspirasi Anda secara detail..."
                     rows={5}
                     value={formData.message}
                     onChange={(e) =>
@@ -264,7 +264,7 @@ const ComplaintForm = () => {
                   ) : (
                     <>
                       <Send className="w-4 h-4 mr-2" />
-                      Kirim Aduan
+                      Kirim Aduan atau Aspirasi
                     </>
                   )}
                 </Button>
