@@ -165,3 +165,24 @@ Status **Diterima server email** berarti SMTP menerima pesan; periksa inbox/spam
 Setelah verifikasi, deploy frontend menggunakan langkah GitHub Pages di atas. Jika ada masalah, batasi akses fitur sementara dan periksa riwayat pengiriman tanpa membuka akses publik file kembali.
 
 Referensi: [SMTP Google Workspace](https://support.google.com/a/answer/176600?hl=en), [App Password Google](https://support.google.com/accounts/answer/185833?hl=en), [batasan Edge Functions Supabase](https://supabase.com/docs/guides/functions/limits), [SMTP Nodemailer](https://nodemailer.com/smtp).
+
+## Mengatur Urutan Carousel Galeri
+
+1. Jalankan `supabase/migrations/20260909000100_gallery_photo_order.sql` di SQL Editor backend yang benar-benar digunakan website (lihat `VITE_SUPABASE_URL`). Migrasi ini membutuhkan tabel galeri dari migrasi sebelumnya. Ini hanya perlu dijalankan sekali sebelum fitur pengurutan dipakai.
+2. Deploy frontend. Buka **Admin → Galeri → Foto tersimpan → Atur urutan foto**.
+3. Tarik pegangan foto ke foto tujuan untuk mengubah posisinya. Urutan dihitung dari kiri ke kanan lalu baris berikutnya. Di HP gunakan pegangan; area gambar tetap dapat digunakan untuk scroll. Tombol panah dan keyboard kiri/kanan juga tersedia.
+4. Klik **Simpan urutan** untuk menerapkan perubahan; **Batal** membuang draft. Urutan berlaku pada carousel Semua dan urutan relatif setiap album. Foto baru ditambahkan di akhir.
+5. Jika admin lain mengubah urutan atau menambah/menghapus foto sebelum penyimpanan, sistem menolak snapshot lama. Tutup pengaturan dan refresh halaman sebelum mengatur kembali.
+
+Migrasi mempertahankan urutan foto lama (terbaru dahulu) sebagai urutan awal. Penyimpanan seluruh posisi dilakukan dalam satu transaksi dan hanya admin dapat menjalankan fungsi pengurutan. Galeri publik tetap bisa dimuat dengan urutan lama jika frontend terpasang sebelum migrasi; penyimpanan urutan memerlukan migrasi.
+
+Verifikasi SQL tersedia di `supabase/tests/gallery_photo_order.sql` untuk database pengujian terisolasi setelah migrasi: urutan tersimpan, penolakan non-admin/duplikasi/snapshot lama, dan foto baru di akhir. Fixture di-rollback; sequence tetap bertambah sebagaimana perilaku PostgreSQL. Uji drag di desktop/HP dan dua sesi admin bersamaan sebelum rilis produksi.
+
+## Upload Logo Organisasi
+
+1. Jalankan `supabase/migrations/20260909000200_organization_logo.sql` di SQL Editor backend yang digunakan website. Migrasi menambahkan pengaturan logo tunggal, bucket publik `organization-logos`, dan fungsi simpan yang hanya dapat digunakan admin. Migrasi ini tidak bergantung pada migrasi dokumen atau galeri, tetapi membutuhkan fungsi `public.is_admin()` dari skema awal.
+2. Deploy frontend, lalu buka **Admin → Logo Organisasi**. Pilih PNG/JPEG/WebP maksimal 2 MB, periksa preview, lalu klik **Simpan logo**. PNG transparan disarankan.
+3. Logo digunakan pada hero, navbar, footer, dan header admin. Gambar ditampilkan utuh dengan proporsi asli. Perubahan langsung memperbarui logo pada sesi admin dan tampil pada kunjungan/refetch berikutnya di beranda.
+4. Jika migrasi belum diterapkan atau gambar gagal dimuat, halaman publik tetap menggunakan ikon pengganti. Panel admin menampilkan petunjuk dan tombol muat ulang. Logo baru tidak mengganti logo aktif sebelum penyimpanan berhasil.
+
+Verifikasi di staging: pengunjung dapat membaca logo tetapi tidak dapat upload/mengganti/menghapusnya; hanya admin dapat menyimpan; file logo aktif tidak dapat dihapus melalui Storage API. Uji dua admin mengganti logo bersamaan: perubahan dari snapshot lama harus ditolak. Logo lama dibersihkan setelah logo baru berhasil disimpan; kegagalan pembersihan tidak membatalkan logo baru.

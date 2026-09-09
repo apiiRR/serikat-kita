@@ -14,6 +14,12 @@ export type Database = {
   }
   public: {
     Tables: {
+      organization_branding: {
+        Row: { id: boolean; logo_path: string | null; updated_at: string }
+        Insert: { id?: boolean; logo_path?: string | null; updated_at?: string }
+        Update: { id?: boolean; logo_path?: string | null; updated_at?: string }
+        Relationships: []
+      }
       document_download_requests: {
         Row: {
           id: string
@@ -117,9 +123,9 @@ export type Database = {
         Relationships: []
       }
       gallery_photos: {
-        Row: { id: string; storage_path: string; caption: string; album_id: string | null; created_at: string }
-        Insert: { id?: string; storage_path: string; caption?: string; album_id?: string | null; created_at?: string }
-        Update: { id?: string; storage_path?: string; caption?: string; album_id?: string | null; created_at?: string }
+        Row: { sort_order: number; id: string; storage_path: string; caption: string; album_id: string | null; created_at: string }
+        Insert: { sort_order?: number; id?: string; storage_path: string; caption?: string; album_id?: string | null; created_at?: string }
+        Update: { sort_order?: number; id?: string; storage_path?: string; caption?: string; album_id?: string | null; created_at?: string }
         Relationships: [{ foreignKeyName: "gallery_photos_album_id_fkey"; columns: ["album_id"]; isOneToOne: false; referencedRelation: "gallery_albums"; referencedColumns: ["id"] }]
       }
       agenda: {
@@ -363,6 +369,8 @@ export type Database = {
       [_ in never]: never
     }
     Functions: {
+      set_organization_logo: { Args: { p_path: string; p_expected_path: string | null }; Returns: undefined }
+      save_gallery_order: { Args: { p_photo_ids: string[]; p_expected_ids: string[] }; Returns: undefined }
       list_document_catalog: {
         Args: Record<PropertyKey, never>
         Returns: { id: string; name: string; description: string | null; file_type: string; created_at: string }[]

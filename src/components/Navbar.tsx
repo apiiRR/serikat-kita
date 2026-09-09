@@ -1,5 +1,6 @@
+import OrganizationLogo from "@/components/OrganizationLogo";
 import { useState } from "react";
-import { Menu, X, Users, Lock } from "lucide-react";
+import { Menu, X } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { Link, useLocation } from "react-router-dom";
 
@@ -18,11 +19,14 @@ const Navbar = () => {
   const [isOpen, setIsOpen] = useState(false);
   const location = useLocation();
 
-  const handleHashClick = (e: React.MouseEvent<HTMLAnchorElement>, href: string) => {
+  const handleHashClick = (
+    e: React.MouseEvent<HTMLAnchorElement>,
+    href: string,
+  ) => {
     e.preventDefault();
     const targetId = href.replace("#", "");
     const element = document.getElementById(targetId);
-    
+
     if (element) {
       element.scrollIntoView({ behavior: "smooth", block: "start" });
     }
@@ -34,12 +38,16 @@ const Navbar = () => {
       <div className="container px-4">
         <div className="flex items-center justify-between h-16">
           {/* Logo */}
-          <a href="#" className="flex items-center gap-2 text-white" onClick={(e) => {
-            e.preventDefault();
-            window.scrollTo({ top: 0, behavior: "smooth" });
-          }}>
+          <a
+            href="#"
+            className="flex items-center gap-2 text-white"
+            onClick={(e) => {
+              e.preventDefault();
+              window.scrollTo({ top: 0, behavior: "smooth" });
+            }}
+          >
             <div className="p-1.5 bg-white/20 rounded-lg">
-              <Users className="w-5 h-5" />
+              <OrganizationLogo className="w-8 h-8" />
             </div>
             <div>
               <span className="font-bold text-sm leading-none block">

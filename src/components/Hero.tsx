@@ -1,4 +1,5 @@
-import { Megaphone, Shield, Users } from "lucide-react";
+import OrganizationLogo from "@/components/OrganizationLogo";
+import { Megaphone, Shield } from "lucide-react";
 import { Button } from "@/components/ui/button";
 
 const Hero = () => {
@@ -18,7 +19,7 @@ const Hero = () => {
         <div className="animate-fade-in">
           <div className="flex items-center justify-center gap-3 mb-6">
             <div className="p-3 bg-white/20 rounded-xl backdrop-blur-sm">
-              <Users className="w-10 h-10 text-white" />
+              <OrganizationLogo className="w-20 h-20" />
             </div>
           </div>
 

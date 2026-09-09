@@ -1,3 +1,5 @@
+import AdminOrganizationLogo from "@/components/admin/AdminOrganizationLogo";
+import OrganizationLogo from "@/components/OrganizationLogo";
 import { useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
 import {
@@ -62,7 +64,8 @@ const Admin = () => {
           <Users className="w-16 h-16 text-muted-foreground mx-auto mb-4" />
           <h1 className="text-2xl font-bold mb-2">Akses Ditolak</h1>
           <p className="text-muted-foreground mb-4">
-            Anda tidak memiliki akses admin. Hubungi administrator untuk mendapatkan akses.
+            Anda tidak memiliki akses admin. Hubungi administrator untuk
+            mendapatkan akses.
           </p>
           <div className="flex gap-4 justify-center">
             <Button variant="outline" onClick={() => navigate("/")}>
@@ -87,7 +90,7 @@ const Admin = () => {
           <div className="flex items-center justify-between">
             <div className="flex items-center gap-3">
               <div className="p-2 bg-white/20 rounded-lg">
-                <Users className="w-6 h-6" />
+                <OrganizationLogo className="w-10 h-10" />
               </div>
               <div>
                 <h1 className="font-bold text-lg">Panel Admin</h1>
@@ -122,7 +125,10 @@ const Admin = () => {
       <main className="container px-4 py-8">
         <Tabs value={activeTab} onValueChange={setActiveTab}>
           <TabsList className="flex w-full justify-start overflow-x-auto h-auto mb-8 [&>button]:shrink-0 [&>button]:min-h-10 [&>button]:flex-1">
-            <TabsTrigger value="announcements" className="flex items-center gap-2">
+            <TabsTrigger
+              value="announcements"
+              className="flex items-center gap-2"
+            >
               <Bell className="w-4 h-4" />
               <span>Pengumuman</span>
             </TabsTrigger>
@@ -134,7 +140,10 @@ const Admin = () => {
               <Users className="w-4 h-4" />
               <span>Struktur</span>
             </TabsTrigger>
-            <TabsTrigger value="lks-bipartit" className="flex items-center gap-2">
+            <TabsTrigger
+              value="lks-bipartit"
+              className="flex items-center gap-2"
+            >
               <UserCheck className="w-4 h-4" />
               <span>LKS</span>
             </TabsTrigger>
@@ -150,10 +159,25 @@ const Admin = () => {
               <MessageSquare className="w-4 h-4" />
               <span>Aduan</span>
             </TabsTrigger>
-            <TabsTrigger value="gallery" className="flex items-center gap-2"><Images className="w-4 h-4" /><span>Galeri</span></TabsTrigger>
+            <TabsTrigger value="gallery" className="flex items-center gap-2">
+              <Images className="w-4 h-4" />
+              <span>Galeri</span>
+            </TabsTrigger>
+            <TabsTrigger
+              value="organization-logo"
+              className="flex items-center gap-2"
+            >
+              <Images className="w-4 h-4" />
+              <span>Logo Organisasi</span>
+            </TabsTrigger>
           </TabsList>
 
-          <TabsContent value="gallery"><AdminGallery /></TabsContent>
+          <TabsContent value="organization-logo">
+            <AdminOrganizationLogo />
+          </TabsContent>
+          <TabsContent value="gallery">
+            <AdminGallery />
+          </TabsContent>
           <TabsContent value="announcements">
             <AdminAnnouncements />
           </TabsContent>
