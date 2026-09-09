@@ -15,7 +15,7 @@ export default function OrganizationLogo({
     return (
       <Users
         aria-label="Serikat Pekerja PT Berdikari"
-        className={cn("shrink-0 text-white", className)}
+        className={cn("shrink-0 text-secondary", className)}
       />
     );
   return (

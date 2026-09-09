@@ -66,7 +66,7 @@ export default function AdminOrganizationLogo() {
       ) : null}
       <div className="rounded-lg border p-5 space-y-4">
         <p className="font-medium">Logo saat ini</p>
-        <div className="bg-secondary rounded-lg w-32 h-32 p-3 flex items-center justify-center">
+        <div className="bg-white rounded-lg w-32 h-32 overflow-hidden border flex items-center justify-center">
           <OrganizationLogo className="w-full h-full" />
         </div>
         <Button
@@ -110,7 +110,7 @@ export default function AdminOrganizationLogo() {
         {preview && (
           <div className="space-y-2">
             <p className="font-medium">Preview logo baru</p>
-            <div className="bg-secondary rounded-lg w-40 h-40 p-3">
+            <div className="bg-white rounded-lg w-40 h-40 overflow-hidden border">
               <img
                 key={preview}
                 src={preview}

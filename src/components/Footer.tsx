@@ -35,8 +35,8 @@ const Footer = () => {
           {/* Brand */}
           <div>
             <div className="flex items-center gap-3 mb-4">
-              <div className="p-2 bg-white/20 rounded-lg">
-                <OrganizationLogo className="w-10 h-10" />
+              <div className="w-14 h-14 shrink-0 overflow-hidden rounded-lg bg-white">
+                <OrganizationLogo className="w-full h-full" />
               </div>
               <div>
                 <h3 className="font-bold text-lg">Serikat Pekerja</h3>

@@ -18,8 +18,8 @@ const Hero = () => {
       <div className="container relative z-10 px-4 py-20 text-center">
         <div className="animate-fade-in">
           <div className="flex items-center justify-center gap-3 mb-6">
-            <div className="p-3 bg-white/20 rounded-xl backdrop-blur-sm">
-              <OrganizationLogo className="w-20 h-20" />
+            <div className="w-28 h-28 shrink-0 overflow-hidden rounded-xl bg-white">
+              <OrganizationLogo className="w-full h-full" />
             </div>
           </div>
 

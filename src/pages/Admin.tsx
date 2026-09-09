@@ -89,8 +89,8 @@ const Admin = () => {
         <div className="container px-4 py-4">
           <div className="flex items-center justify-between">
             <div className="flex items-center gap-3">
-              <div className="p-2 bg-white/20 rounded-lg">
-                <OrganizationLogo className="w-10 h-10" />
+              <div className="w-14 h-14 shrink-0 overflow-hidden rounded-lg bg-white">
+                <OrganizationLogo className="w-full h-full" />
               </div>
               <div>
                 <h1 className="font-bold text-lg">Panel Admin</h1>

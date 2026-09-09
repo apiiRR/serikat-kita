@@ -46,8 +46,8 @@ const Navbar = () => {
               window.scrollTo({ top: 0, behavior: "smooth" });
             }}
           >
-            <div className="p-1.5 bg-white/20 rounded-lg">
-              <OrganizationLogo className="w-8 h-8" />
+            <div className="w-11 h-11 shrink-0 overflow-hidden rounded-lg bg-white">
+              <OrganizationLogo className="w-full h-full" />
             </div>
             <div>
               <span className="font-bold text-sm leading-none block">
