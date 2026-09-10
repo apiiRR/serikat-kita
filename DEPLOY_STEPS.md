@@ -186,3 +186,51 @@ Verifikasi SQL tersedia di `supabase/tests/gallery_photo_order.sql` untuk databa
 4. Jika migrasi belum diterapkan atau gambar gagal dimuat, halaman publik tetap menggunakan ikon pengganti. Panel admin menampilkan petunjuk dan tombol muat ulang. Logo baru tidak mengganti logo aktif sebelum penyimpanan berhasil.
 
 Verifikasi di staging: pengunjung dapat membaca logo tetapi tidak dapat upload/mengganti/menghapusnya; hanya admin dapat menyimpan; file logo aktif tidak dapat dihapus melalui Storage API. Uji dua admin mengganti logo bersamaan: perubahan dari snapshot lama harus ditolak. Logo lama dibersihkan setelah logo baru berhasil disimpan; kegagalan pembersihan tidak membatalkan logo baru.
+
+## Error `InvalidWorkerCreation: could not find an appropriate entrypoint`
+
+Error ini terjadi sebelum kode formulir dijalankan: runtime menerima nama function tetapi tidak menemukan entrypoint yang dapat dibaca pada direktori function yang dipakainya. Periksa deployment file dan volume mount, bukan data nama/email atau SMTP.
+
+Pada server Supabase self-hosted, direktori functions yang dimount ke container harus berisi struktur berikut (contoh lokasi host standar `volumes/functions`):
+
+```text
+volumes/functions/
+├── main/                         # Dispatcher bawaan server: pertahankan
+├── request-document-download/
+│   └── index.ts
+├── review-document-request/
+│   └── index.ts
+└── _shared/
+    ├── authorize.ts
+    ├── client.ts
+    ├── document-workflow.ts
+    ├── http.ts
+    └── smtp.ts
+```
+
+Salin **tiga direktori** dari `supabase/functions` di repository: `request-document-download`, `review-document-request`, dan `_shared`. Letakkan langsung di direktori functions server; jangan membuat lapisan tambahan seperti `volumes/functions/supabase/functions`. Jangan mengganti dispatcher `main/index.ts` milik server.
+
+Periksa mount aktual container melalui konfigurasi deployment. Path di dalam container berbeda antarversi; gunakan lokasi yang ditunjuk dispatcher/runtime, bukan mengasumsikan selalu `/home/deno/functions` atau `/app/edge-functions`. File `request-document-download/index.ts` harus ada dan dapat dibaca **di dalam container**, bukan hanya pada filesystem host.
+
+Untuk instalasi Docker Compose standar dengan service bernama `functions`, setelah file disalin, jalankan dari direktori Compose server:
+
+```bash
+docker compose restart functions
+docker compose logs --tail=80 functions
+```
+
+Jika nama service berbeda atau memakai panel deployment, restart service Edge Functions yang sesuai. Deploy ulang GitHub Pages hanya memperbarui frontend dan tidak memasang file pada server Supabase. `supabase functions deploy` yang terhubung ke project cloud juga tidak menyalin file ke instalasi self-hosted ini.
+
+Setelah restart, coba kembali pengajuan. Jika error entrypoint tetap muncul, periksa tujuan mount, nama folder (harus persis `request-document-download`), file `index.ts`, dan konfigurasi path dispatcher. Jika error berubah menjadi import/module yang hilang, pastikan `_shared` ikut disalin dan runtime dapat mengunduh dependensi npm yang digunakan.
+
+Referensi: [deployment Edge Functions self-hosted](https://supabase.com/docs/guides/self-hosting/self-hosted-functions).
+
+## Statistik tayangan website
+
+Sebelum deployment frontend, jalankan isi `supabase/migrations/20260910000100_website_views.sql` melalui SQL Editor pada **server Supabase yang dipakai website**. Fitur ini memakai RPC database, sehingga tidak memerlukan Edge Function atau secret tambahan.
+
+Setelah frontend diperbarui, buka beranda lalu masuk ke admin → **Statistik** → **Perbarui**. Tersedia total tayangan, hari ini, 7 hari terakhir, dan 30 hari terakhir (kalender WIB, termasuk hari ini). Setiap pembukaan beranda atau refresh dihitung satu tayangan; halaman login/admin tidak dihitung. Ini bukan pengunjung unik. Data historis sebelum pemasangan tidak bisa diisi kembali. Kegagalan jaringan/pemblokiran request dapat menyebabkan tayangan tidak tercatat; endpoint publik tidak memfilter bot dan bukan metrik audit.
+
+Tabel hanya menyimpan ID peristiwa acak dan waktu server, tanpa nama/email/IP. Akses langsung tabel ditutup untuk pengunjung dan pengguna biasa; RPC statistik memverifikasi `public.is_admin()`. RPC pencatatan hanya menerima UUID dan mengabaikan ID duplikat. Pengunjung tidak dapat menentukan waktu atau mengubah tayangan yang sudah tercatat.
+
+Verifikasi di server pengujian: buka beranda dua kali (total bertambah dua), berpindah section tanpa refresh (tidak bertambah), lalu buka admin/login (tidak bertambah). Pastikan pengguna anonim/non-admin tidak dapat menjalankan `get_website_view_stats` atau membaca/mengubah tabel `website_page_views`. Jika muncul pesan gagal memuat statistik, periksa migrasi dan role admin. Pengujian frontend menggunakan mock RPC; pengujian akses database tetap perlu dijalankan pada server.

@@ -1,8 +1,10 @@
+import AdminWebsiteStats from "@/components/admin/AdminWebsiteStats";
 import AdminOrganizationLogo from "@/components/admin/AdminOrganizationLogo";
 import OrganizationLogo from "@/components/OrganizationLogo";
 import { useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
 import {
+  BarChart3,
   Images,
   Users,
   Bell,
@@ -170,7 +172,11 @@ const Admin = () => {
               <Images className="w-4 h-4" />
               <span>Logo Organisasi</span>
             </TabsTrigger>
+            <TabsTrigger value="statistics" className="flex items-center gap-2">
+              <BarChart3 className="w-4 h-4" /><span>Statistik</span>
+            </TabsTrigger>
           </TabsList>
+          <TabsContent value="statistics"><AdminWebsiteStats /></TabsContent>
 
           <TabsContent value="organization-logo">
             <AdminOrganizationLogo />

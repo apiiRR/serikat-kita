@@ -14,6 +14,12 @@ export type Database = {
   }
   public: {
     Tables: {
+      website_page_views: {
+        Row: { id: string; viewed_at: string }
+        Insert: { id: string; viewed_at?: string }
+        Update: { id?: string; viewed_at?: string }
+        Relationships: []
+      }
       organization_branding: {
         Row: { id: boolean; logo_path: string | null; updated_at: string }
         Insert: { id?: boolean; logo_path?: string | null; updated_at?: string }
@@ -369,6 +375,8 @@ export type Database = {
       [_ in never]: never
     }
     Functions: {
+      record_website_view: { Args: { p_event_id: string }; Returns: undefined }
+      get_website_view_stats: { Args: Record<PropertyKey, never>; Returns: Json }
       set_organization_logo: { Args: { p_path: string; p_expected_path: string | null }; Returns: undefined }
       save_gallery_order: { Args: { p_photo_ids: string[]; p_expected_ids: string[] }; Returns: undefined }
       list_document_catalog: {

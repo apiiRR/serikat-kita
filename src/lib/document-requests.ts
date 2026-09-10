@@ -32,15 +32,36 @@ export async function invokeDocumentFunction<T>(
 ): Promise<T> {
   const { data, error } = await supabase.functions.invoke(name, { body });
   if (error) {
-    let message = "Proses gagal. Periksa koneksi dan coba lagi.";
+    let message =
+      "Layanan permintaan dokumen tidak dapat dihubungi. Silakan coba lagi nanti atau hubungi admin.";
+    let status: number | undefined;
     if ("context" in error && error.context instanceof Response) {
+      status = error.context.status;
+      if (status === 404)
+        message =
+          "Layanan permintaan dokumen belum tersedia. Silakan hubungi admin.";
+      else if (status === 401 || status === 403)
+        message = "Akses ke layanan dokumen ditolak. Silakan hubungi admin.";
+      else if (status === 429)
+        message = "Terlalu banyak permintaan. Silakan coba lagi nanti.";
+      else if (status >= 500)
+        message =
+          "Layanan dokumen sedang bermasalah. Silakan coba lagi nanti atau hubungi admin.";
       try {
-        const response = await error.context.json();
+        const response = await error.context.clone().json();
+        // The application functions return a user-facing `error` string. Gateway
+        // messages may contain internal details, so use the HTTP fallback for them.
         if (typeof response.error === "string") message = response.error;
       } catch {
-        /* Keep safe fallback. */
+        /* Gateway HTML and empty responses use the safe HTTP fallback. */
       }
     }
+    // No form contents, credentials, response body, or JWTs in diagnostics.
+    console.warn("Document function request failed", {
+      function: name,
+      status: status ?? "no-http-response",
+      errorType: error.name,
+    });
     throw new Error(message);
   }
   return data as T;
